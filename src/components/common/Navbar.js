@@ -1,39 +1,67 @@
-import React from "react";
+import React, { useState } from "react";
 import "../../assets/styles.css";
 import { useNavigate } from "react-router-dom";
 
 const Navbar = ({ isAuthenticated, onLogout }) => {
   const navigate = useNavigate();
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
+
+  const closeMenu = () => {
+    setMenuOpen(false);
+  };
 
   return (
     <nav className="navbar">
-      <div className="navbar-brand" onClick={() => navigate("/")}>
+      <div
+        className="navbar-brand"
+        onClick={() => {
+          navigate("/");
+          closeMenu();
+        }}
+      >
         <span className="brand-name">Smart VMS</span>
       </div>
-      <div className="navbar-links">
-        <a href="#features" className="navbar-button">
+
+      {/* Hamburger Toggle */}
+      <div className="navbar-toggle" onClick={toggleMenu}>
+        ☰
+      </div>
+
+      {/* Navbar Links */}
+      <div className={`navbar-links ${menuOpen ? "active" : ""}`}>
+        <a href="#features" className="navbar-button" onClick={closeMenu}>
           Features
         </a>
-        <a href="#pricing" className="navbar-button">
+        <a href="#pricing" className="navbar-button" onClick={closeMenu}>
           Pricing
         </a>
-        <a href="#faqs" className="navbar-button">
+        <a href="#faqs" className="navbar-button" onClick={closeMenu}>
           FAQs
         </a>
-        <a href="#contact" className="navbar-button">
+        <a href="#contact" className="navbar-button" onClick={closeMenu}>
           Contact Us
         </a>
         {!isAuthenticated ? (
           <>
             <button
               className="navbar-button primary"
-              onClick={() => navigate("/login")}
+              onClick={() => {
+                navigate("/login");
+                closeMenu();
+              }}
             >
               Login
             </button>
             <button
               className="navbar-button primary"
-              onClick={() => navigate("/register")}
+              onClick={() => {
+                navigate("/register");
+                closeMenu();
+              }}
             >
               Register
             </button>
@@ -42,11 +70,20 @@ const Navbar = ({ isAuthenticated, onLogout }) => {
           <>
             <button
               className="navbar-button"
-              onClick={() => navigate("/dashboard")}
+              onClick={() => {
+                navigate("/dashboard");
+                closeMenu();
+              }}
             >
               Dashboard
             </button>
-            <button className="navbar-button logout" onClick={onLogout}>
+            <button
+              className="navbar-button logout"
+              onClick={() => {
+                onLogout();
+                closeMenu();
+              }}
+            >
               Logout
             </button>
           </>
@@ -55,4 +92,5 @@ const Navbar = ({ isAuthenticated, onLogout }) => {
     </nav>
   );
 };
+
 export default Navbar;

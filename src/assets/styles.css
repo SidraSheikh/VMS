@@ -3,10 +3,11 @@ html {
 }
 /* General Body and Background */
 body {
- background: url('https://i.pinimg.com/736x/be/5a/62/be5a6295b3878d593972e9ec5a78a81e.jpg') no-repeat center center/cover;
+  background: url("https://i.pinimg.com/736x/be/5a/62/be5a6295b3878d593972e9ec5a78a81e.jpg")
+    no-repeat center center/cover;
   background-size: cover;
   background-attachment: fixed;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
   padding: 0;
   color: #ffffff;
@@ -16,7 +17,7 @@ body {
 
 /* Navbar */
 .navbar {
-  background-color: #343a40; 
+  background-color: #343a40;
   padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
@@ -45,13 +46,13 @@ body {
 }
 
 .brand-name:hover {
-   background-color: #0056b3;
+  background-color: #0056b3;
   transform: scale(1.05);
 }
 
 /* Navbar links */
 .navbar-links {
- color: #343a40;
+  color: #343a40;
   padding: 9px 10px;
   margin-left: 1rem;
   font-weight: 800;
@@ -59,6 +60,10 @@ body {
   font-size: 1rem;
   margin-left: 5rem;
   cursor: pointer;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+
   transition: all 0.3s ease;
 }
 .navbar-button {
@@ -69,6 +74,10 @@ body {
   margin-left: 1rem;
   cursor: pointer;
   transition: all 0.3s ease;
+}
+
+.navbar-links.active {
+  display: flex;
 }
 
 .navbar-button:hover {
@@ -100,24 +109,51 @@ body {
   background-color: #c0392b;
 }
 
-/* Mobile responsiveness */
+/* Hamburger Toggle Button */
+.navbar-toggle {
+  display: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: white;
+  background: none;
+  border: none;
+}
+
+/* Mobile Responsive Styles */
 @media (max-width: 768px) {
   .navbar {
     flex-direction: column;
     padding: 1rem;
+    position: relative;
+  }
+
+  .navbar-toggle {
+    display: block; /* Show hamburger toggle */
   }
 
   .navbar-links {
-    flex-direction: column;
-    gap: 10px;
-    align-items: flex-start;
+    display: none; /* Hide links by default */
+    flex-direction: column; /* Stack links vertically */
+    gap: 10px; /* Add space between links */
+    background-color: #343a40; /* Match navbar background */
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    padding: 1rem 0;
+    z-index: 10;
+  }
+
+  .navbar-links.active {
+    display: flex; /* Show links on toggle */
   }
 
   .navbar-button {
-    margin: 0.5rem 0;
+    padding: 10px 20px;
+    width: 100%; /* Full width for mobile links */
+    text-align: center;
   }
 }
-
 /* Landing Header */
 .landing-header {
   background: linear-gradient(to right, #4d7278, #50888d);
@@ -147,7 +183,7 @@ body {
 }
 /* FAQs Section */
 .faqs-section {
-    background: rgba(255, 255, 255, 0.479);
+  background: rgba(255, 255, 255, 0.479);
   padding: 8rem 0;
   margin-top: 2rem;
 }
@@ -314,7 +350,7 @@ h2 {
   gap: 30px;
   justify-content: space-between;
   align-items: flex-start;
-   background: rgba(255, 255, 255, 0.479);
+  background: rgba(255, 255, 255, 0.479);
   border-radius: 8px;
   box-shadow: 0 6px 30px rgba(0, 0, 0, 0.1);
   padding: 40px;
@@ -432,9 +468,9 @@ button:focus {
 
 /* Footer */
 .footer {
-  background-color: #2c3e50; 
-  color: #ecf0f1; 
-  padding: 30px 0; 
+  background-color: #2c3e50;
+  color: #ecf0f1;
+  padding: 30px 0;
   text-align: center;
 }
 
@@ -451,8 +487,6 @@ button:focus {
 .footer a:hover {
   text-decoration: underline;
 }
-
-
 
 /* Register Container */
 .register-container {
@@ -472,7 +506,12 @@ button:focus {
   padding: 40px 120px; /* More space inside */
   border-radius: 70px;
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-    background: rgba(255, 255, 255, 0.479); /* Semi-transparent input background */
+  background: rgba(
+    255,
+    255,
+    255,
+    0.479
+  ); /* Semi-transparent input background */
 
   text-align: center;
 }
@@ -584,20 +623,21 @@ button:focus {
   color: #374e50;
 }
 
-
 /* Visitor Registration Form Styling */
 .visitor-registration-container {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: rgba(0, 0, 0, 0.7) url('https://i.pinimg.com/736x/be/5a/62/be5a6295b3878d593972e9ec5a78a81e.jpg') no-repeat center center/cover;
+  background: rgba(0, 0, 0, 0.7)
+    url("https://i.pinimg.com/736x/be/5a/62/be5a6295b3878d593972e9ec5a78a81e.jpg")
+    no-repeat center center/cover;
   padding: 20px;
   box-sizing: border-box;
 }
 
 .visitor-registration-form {
- background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.9);
   border-radius: 15px;
   padding: 40px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
@@ -714,7 +754,6 @@ button:focus {
   }
 }
 
-
 /* Global Reset */
 * {
   margin: 0;
@@ -723,7 +762,7 @@ button:focus {
 }
 
 body {
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
   color: #333;
 }
 
@@ -940,7 +979,6 @@ h1 {
   }
 }
 
-
 /* General Layout for Host Dashboard */
 .host-dashboard {
   padding: 20px;
@@ -1093,7 +1131,6 @@ h1 {
   color: #ffffff;
   font-weight: 600;
   text-transform: uppercase;
-
 }
 
 .visitor-request-container tr:nth-child(even) {
