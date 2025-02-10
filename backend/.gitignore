@@ -1,0 +1,33 @@
+# Node.js dependencies
+node_modules/
+npm-debug.log
+yarn.lock
+package-lock.json
+
+# Logs
+logs/
+*.log
+debug.log
+error.log
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.production
+
+# Build & Cache files
+dist/
+build/
+.cache/
+
+# Database dumps
+*.sqlite
+*.sqlite3
+*.db
+
+# Misc
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
