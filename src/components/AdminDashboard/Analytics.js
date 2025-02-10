@@ -1,115 +1,125 @@
-import React, { useRef, useEffect } from "react";
-import "../../assets/styles.css";
+// components/AdminDashboard/Analytics.js
+import React, { useState, useEffect } from "react";
+import { Bar, Line, Pie } from "react-chartjs-2";
 import {
-  Chart,
+  Chart as ChartJS,
   CategoryScale,
   LinearScale,
+  BarElement,
   PointElement,
   LineElement,
-  LineController,
-  BarElement,
-  BarController,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  ArcElement
 } from "chart.js";
+import io from "socket.io-client";
+import "../../assets/styles.css";
 
-Chart.register(
+ChartJS.register(
   CategoryScale,
   LinearScale,
+  BarElement,
   PointElement,
   LineElement,
-  LineController,
-  BarElement,
-  BarController,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  ArcElement
 );
 
+const socket = io("http://localhost:5000"); // Connect to the backend
+
 const Analytics = () => {
-  const lineChartRef = useRef(null);
-  const barChartRef = useRef(null);
-  const lineChartInstance = useRef(null);
-  const barChartInstance = useRef(null);
+  const [visitorTrends, setVisitorTrends] = useState({
+    labels: [],
+    data: []
+  });
+  const [parkingUtilization, setParkingUtilization] = useState({
+    labels: [],
+    data: []
+  });
+  const [approvalRates, setApprovalRates] = useState({
+    labels: [],
+    data: []
+  });
 
   useEffect(() => {
-    const ctxLine = lineChartRef.current.getContext("2d");
-    const ctxBar = barChartRef.current.getContext("2d");
+    // Fetch initial analytics data
+    fetch("/api/analytics/visitor-trends")
+      .then((res) => res.json())
+      .then((data) => setVisitorTrends(data));
 
-    if (lineChartInstance.current) lineChartInstance.current.destroy();
-    if (barChartInstance.current) barChartInstance.current.destroy();
+    fetch("/api/analytics/parking-utilization")
+      .then((res) => res.json())
+      .then((data) => setParkingUtilization(data));
 
-    lineChartInstance.current = new Chart(ctxLine, {
-      type: "line",
-      data: {
-        labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-        datasets: [
-          {
-            label: "Visitors Per Day",
-            data: [50, 60, 45, 70, 80, 90, 100],
-            backgroundColor: "rgba(75,192,192,0.4)",
-            borderColor: "rgba(75,192,192,1)",
-            borderWidth: 2
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          title: {
-            display: true,
-            text: "Visitor Trends"
-          }
-        }
-      }
-    });
+    fetch("/api/analytics/approval-rates")
+      .then((res) => res.json())
+      .then((data) => setApprovalRates(data));
 
-    barChartInstance.current = new Chart(ctxBar, {
-      type: "bar",
-      data: {
-        labels: ["2-Wheelers", "4-Wheelers"],
-        datasets: [
-          {
-            label: "Parking Usage",
-            data: [30, 70],
-            backgroundColor: ["#4caf50", "#2196f3"]
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          title: {
-            display: true,
-            text: "Parking Utilization"
-          }
-        }
-      }
+    // Listen for real-time updates
+    socket.on("analyticsUpdate", (data) => {
+      setVisitorTrends(data.visitorTrends);
+      setParkingUtilization(data.parkingUtilization);
+      setApprovalRates(data.approvalRates);
     });
 
     return () => {
-      if (lineChartInstance.current) lineChartInstance.current.destroy();
-      if (barChartInstance.current) barChartInstance.current.destroy();
+      socket.disconnect(); // Clean up on unmount
     };
   }, []);
 
   return (
-    <div className="analytics">
-      <div style={{ marginBottom: "20px" }}>
+    <div className="analytics-container">
+
+      <div className="chart-container">
         <h3>Visitor Trends</h3>
-        <div style={{ width: "100%", height: "300px" }}>
-          <canvas ref={lineChartRef}></canvas>
-        </div>
+        <Line
+          data={{
+            labels: visitorTrends.labels,
+            datasets: [
+              {
+                label: "Visitors",
+                data: visitorTrends.data,
+                borderColor: "rgba(75, 192, 192, 1)",
+                backgroundColor: "rgba(75, 192, 192, 0.2)"
+              }
+            ]
+          }}
+        />
       </div>
 
-      <div>
+      <div className="chart-container">
         <h3>Parking Utilization</h3>
-        <div style={{ width: "100%", height: "300px" }}>
-          <canvas ref={barChartRef}></canvas>
-        </div>
+        <Bar
+          data={{
+            labels: parkingUtilization.labels,
+            datasets: [
+              {
+                label: "Parking Slots",
+                data: parkingUtilization.data,
+                backgroundColor: ["#4caf50", "#2196f3"]
+              }
+            ]
+          }}
+        />
+      </div>
+
+      <div className="chart-container">
+        <h3>Approval Rates</h3>
+        <Pie
+          data={{
+            labels: approvalRates.labels,
+            datasets: [
+              {
+                label: "Approval Rates",
+                data: approvalRates.data,
+                backgroundColor: ["#4caf50", "#f44336"]
+              }
+            ]
+          }}
+        />
       </div>
     </div>
   );

@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import "../../assets/styles.css";
+import api from "../../services/api";
+import "../../assets/styles.css"; // Keep the same styling
 
-const VisitorRegistration = () => {
+const VisitorRegistration = ({ onSubmit }) => {
   const [formData, setFormData] = useState({
     fullName: "",
     cnic: "",
@@ -14,6 +15,7 @@ const VisitorRegistration = () => {
   });
 
   const [errors, setErrors] = useState({});
+  const [message, setMessage] = useState("");
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -32,20 +34,60 @@ const VisitorRegistration = () => {
     return errors;
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const validationErrors = validate();
-    if (Object.keys(validationErrors).length === 0) {
-      console.log("Visitor Registration Data:", formData);
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  const validationErrors = validate();
+  if (Object.keys(validationErrors).length > 0) {
+    setErrors(validationErrors);
+    return;
+  }
+
+  try {
+    const response = await api.post("/visitors", formData, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      }
+    });
+
+    console.log("Visitor Registration Response:", response.data);
+    setMessage("Visitor registered successfully!");
+    setFormData({
+      fullName: "",
+      cnic: "",
+      mobileNumber: "",
+      organizationName: "",
+      purposeOfVisit: "",
+      hostName: "",
+      vehicleNumber: "",
+      vehicleType: ""
+    });
+    setErrors({});
+    onSubmit(response.data.visitor);
+  } catch (error) {
+    console.error("Error registering visitor:", error);
+    if (error.response) {
+      console.log("Server Response Error:", error.response.data);
+      setMessage(`Failed: ${error.response.data.message}`);
     } else {
-      setErrors(validationErrors);
+      setMessage("Failed to register visitor. Server unreachable.");
     }
-  };
+  }
+};
 
   return (
     <div className="visitor-registration-container">
       <div className="visitor-registration-form">
         <h2>Visitor Registration</h2>
+        {message && (
+          <p
+            className={`message ${
+              message.includes("Failed") ? "error-message" : "success-message"
+            }`}
+          >
+            {message}
+          </p>
+        )}
         <form onSubmit={handleSubmit}>
           <div className="input-group-visitor">
             <label htmlFor="fullName">Full Name</label>

@@ -1,20 +1,35 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
-const SidebarHost = ({ setCurrentSection }) => {
-  console.log("setCurrentSection:", setCurrentSection);  
-  const sections = [
-    "Logout"
-  ];
+const SidebarHost = ({ isOpen, toggleSidebar }) => {
+  const navigate = useNavigate();
+
+  const handleNavigation = (path) => {
+    navigate(path);
+    toggleSidebar();
+  };
 
   return (
-    <div className="sidebar">
-      <h2>VMS Dashboard</h2>
+    <div className={`sidebar ${isOpen ? "" : "closed"}`}>
+      {/* Sidebar Toggle Button */}
+      <div className="sidebar-toggle" onClick={toggleSidebar}>
+        {isOpen ? "❮" : "❯"}
+      </div>
+
+      {/* Sidebar Header */}
+      <h2>{isOpen ? "VMS Dashboard" : "VMS"}</h2>
+
       <ul>
-        {sections.map((section, index) => (
-          <li key={index} onClick={() => setCurrentSection(section)}>
-            {section}
-          </li>
-        ))}
+        <li>
+          <a
+            href="#"
+            onClick={() => handleNavigation("/logout")}
+            className="navbar-button"
+          >
+            <i className="fas fa-sign-out-alt"></i>
+            {isOpen && <span>Logout</span>}
+          </a>
+        </li>
       </ul>
     </div>
   );

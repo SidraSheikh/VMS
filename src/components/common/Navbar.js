@@ -77,15 +77,6 @@ const Navbar = ({ isAuthenticated, onLogout }) => {
             >
               Dashboard
             </button>
-            <button
-              className="navbar-button logout"
-              onClick={() => {
-                onLogout();
-                closeMenu();
-              }}
-            >
-              Logout
-            </button>
           </>
         )}
       </div>

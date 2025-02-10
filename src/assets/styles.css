@@ -97,18 +97,6 @@ body {
   background-color: #008ba3;
 }
 
-.navbar-button.logout {
-  background-color: #e74c3c;
-  color: white;
-  padding: 8px 16px;
-  border-radius: 4px;
-  font-weight: 600;
-}
-
-.navbar-button.logout:hover {
-  background-color: #c0392b;
-}
-
 /* Hamburger Toggle Button */
 .navbar-toggle {
   display: none;
@@ -835,22 +823,27 @@ body {
   font-size: 1.2rem;
 }
 
-.sidebar ul li:hover {
+.sidebar ul li a i {
+  margin-right: 10px;
+  color: #fff;
+}
+
+.sidebar ul li a:hover {
   background-color: #495057; /* Slightly lighter */
   color: #20c997; /* Teal hover */
   transform: scale(1.05);
 }
 
-.sidebar ul li.active {
+.sidebar ul li a.active {
   background-color: #20c997;
   color: white;
 }
 
-.sidebar.closed ul li {
+.sidebar.closed ul li a{
   justify-content: center; /* Center items in closed state */
 }
 
-.sidebar.closed ul li span {
+.sidebar.closed ul li a {
   display: none; /* Hide text labels */
 }
 
@@ -915,6 +908,8 @@ h1 {
   font-weight: bold;
   color: #2c3e50;
 }
+
+
 
 .table {
   width: 100%;
@@ -1247,12 +1242,12 @@ button {
 }
 
 .btn-primary {
-  background-color: #20c997;
+  background-color: #008ba3;
   color: #ffffff;
 }
 
 .btn-primary:hover {
-  background-color: #1a926a;
+  background-color: #086b7c;
   transform: translateY(-2px);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
@@ -1275,7 +1270,7 @@ button {
   border-radius: 8px;
   font-size: 1rem;
   color: #2c3e50;
-  border-left: 4px solid #20c997;
+  border-left: 4px solid #008ba3;
   margin-top: 10px;
 }
 

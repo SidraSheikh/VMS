@@ -1,19 +1,51 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "../../services/api";
 import "../../assets/styles.css";
 
 const Login = () => {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: ""
-  });
+  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Login Data Submitted:", formData);
+    setError(""); // Clear previous errors
+    try {
+      console.log("Logging in with:", formData); // Debugging log
+      const response = await axios.post("/auth/login", formData); // Ensure the endpoint is correct
+      console.log("Login successful:", response.data);
+
+      const { token, role } = response.data;
+
+      // Store the token in localStorage
+      localStorage.setItem("token", token);
+
+      // Redirect to the appropriate dashboard based on role
+      switch (role) {
+        case "admin":
+          navigate("/admin");
+          break;
+        case "host":
+          navigate("/host");
+          break;
+        case "receptionist":
+          navigate("/reception");
+          break;
+        case "security":
+          navigate("/security");
+          break;
+        default:
+          setError("Unknown role. Contact support.");
+      }
+    } catch (error) {
+      console.error("Login error:", error.response?.data || error); // Debugging log
+      setError(error.response?.data?.message || "Login failed. Try again.");
+    }
   };
 
   return (
@@ -26,6 +58,7 @@ const Login = () => {
           />
         </div>
         <h2>Welcome Back</h2>
+        {error && <p className="error">{error}</p>}
         <form onSubmit={handleSubmit}>
           <div className="input-group">
             <i className="fas fa-envelope"></i>

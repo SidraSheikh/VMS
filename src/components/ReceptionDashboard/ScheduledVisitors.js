@@ -1,22 +1,36 @@
 import React, { useState, useEffect } from "react";
+import api from "../../services/api"; // Import the api instance
 import "../../assets/styles.css";
 
 const ScheduledVisitors = () => {
   const [visitors, setVisitors] = useState([]);
 
   useEffect(() => {
-    fetch("/api/visitors/scheduled")
-      .then((response) => response.json())
-      .then((data) => setVisitors(data.visitors))
-      .catch((error) => console.error("Error fetching visitors:", error));
+    const fetchData = async () => {
+      try {
+        const response = await api.get("/visitors/scheduled", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        });
+        console.log("Scheduled Visitors API Response:", response); // Debug log
+        setVisitors(response.data.visitors);
+      } catch (error) {
+        console.error("Error fetching scheduled visitors:", error);
+      }
+    };
+
+    fetchData();
   }, []);
 
   const notifyHost = async (visitorId) => {
     try {
-      const response = await fetch(`/api/visitors/notify/${visitorId}`, {
-        method: "POST"
+      const response = await api.post(`/visitors/notify/${visitorId}`, null, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
       });
-      const data = await response.json();
+      const data = response.data;
       if (data.success) {
         alert("Host notified successfully!");
       } else {
@@ -31,11 +45,11 @@ const ScheduledVisitors = () => {
     <div className="dashboard-section">
       <ul className="visitor-list">
         {visitors.map((visitor) => (
-          <li className="visitor-item" key={visitor.id}>
-            {visitor.name} - {visitor.time}
+          <li className="visitor-item" key={visitor._id}>
+            {visitor.fullName} - {visitor.purposeOfVisit}
             <button
               className="btn-secondary"
-              onClick={() => notifyHost(visitor.id)}
+              onClick={() => notifyHost(visitor._id)}
             >
               Notify Host
             </button>
