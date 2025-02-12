@@ -5,31 +5,20 @@ const Notification = () => {
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
-    // Fetch notifications from the backend or WebSocket
-    // Example API call: fetch("/api/notifications").then((res) => res.json()).then(setNotifications);
-
-    // Simulate real-time updates
-    const interval = setInterval(() => {
-      setNotifications((prev) => [
-        ...prev,
-        {
-          id: prev.length + 1,
-          message: `New notification ${prev.length + 1}`,
-          timestamp: new Date().toLocaleTimeString()
-        }
-      ]);
-    }, 10000);
-
-    return () => clearInterval(interval);
+    fetch("http://localhost:5000/api/notifications")
+      .then((res) => res.json())
+      .then(setNotifications);
   }, []);
 
   return (
     <div className="notification-container">
       <ul className="notification-list">
         {notifications.map((notification) => (
-          <li key={notification.id}>
+          <li key={notification._id}>
             <p>{notification.message}</p>
-            <small>{notification.timestamp}</small>
+            <small>
+              {new Date(notification.timestamp).toLocaleTimeString()}
+            </small>
           </li>
         ))}
       </ul>

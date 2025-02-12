@@ -1,4 +1,3 @@
-// components/AdminDashboard/Analytics.js
 import React, { useState, useEffect } from "react";
 import { Bar, Line, Pie } from "react-chartjs-2";
 import {
@@ -28,8 +27,10 @@ ChartJS.register(
   ArcElement
 );
 
-const socket = io("http://localhost:5000"); // Connect to the backend
-
+const socket = io("http://localhost:5000", {
+  transports: ["websocket", "polling"], // Allow WebSocket and fallback
+  withCredentials: true
+});
 const Analytics = () => {
   const [visitorTrends, setVisitorTrends] = useState({
     labels: [],
@@ -66,7 +67,7 @@ const Analytics = () => {
     });
 
     return () => {
-      socket.disconnect(); // Clean up on unmount
+      socket.disconnect(); 
     };
   }, []);
 

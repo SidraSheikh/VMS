@@ -1,21 +1,55 @@
 import React, { useState, useEffect } from "react";
+import api from "../../services/api";
 import "../../assets/styles.css";
 
 const VisitorRequest = () => {
   const [requests, setRequests] = useState([]);
 
   useEffect(() => {
-    // Fetch visitor requests from the backend
-    // Example API call: fetch("/api/visitor-requests").then((res) => res.json()).then(setRequests);
+    const fetchVisitors = async () => {
+      try {
+        const response = await api.get("/visitors/host", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        });
+        console.log("Host Visitors:", response.data);
+        setRequests(response.data);
+      } catch (error) {
+        console.error(" Error fetching host visitors:", error);
+      }
+    };
+    fetchVisitors();
   }, []);
 
-  const handleAction = (id, action) => {
-    setRequests((prev) =>
-      prev.map((req) => (req.id === id ? { ...req, status: action } : req))
+  const handleApprove = async (id) => {
+    await api.post(
+      "/visitors/approve",
+      { visitorId: id },
+      {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+      }
     );
+    setRequests(
+      requests.map((req) =>
+        req._id === id ? { ...req, status: "Approved" } : req
+      )
+    );
+  };
 
-    // Update the backend with the new status
-    // Example API call: fetch(`/api/visitor-requests/${id}`, { method: "PUT", body: JSON.stringify({ status: action }) });
+  const handleDecline = async (id) => {
+    await api.post(
+      "/visitors/decline",
+      { visitorId: id },
+      {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+      }
+    );
+    setRequests(
+      requests.map((req) =>
+        req._id === id ? { ...req, status: "Declined" } : req
+      )
+    );
   };
 
   return (
@@ -23,7 +57,9 @@ const VisitorRequest = () => {
       <table>
         <thead>
           <tr>
-            <th>Visitor Name</th>
+            <th>Name</th>
+            <th>CNIC</th>
+            <th>Mobile</th>
             <th>Purpose</th>
             <th>Status</th>
             <th>Actions</th>
@@ -31,18 +67,22 @@ const VisitorRequest = () => {
         </thead>
         <tbody>
           {requests.map((request) => (
-            <tr key={request.id}>
-              <td>{request.visitorName}</td>
-              <td>{request.purpose}</td>
+            <tr key={request._id}>
+              <td>{request.fullName}</td>
+              <td>{request.cnic}</td>
+              <td>{request.mobileNumber}</td>
+              <td>{request.purposeOfVisit}</td>
               <td>{request.status}</td>
               <td>
-                {request.status === "Pending" ? (
+                {request.status === "Pending" && (
                   <>
-                    <button onClick={() => handleAction(request.id, "Approved")}>Approve</button>
-                    <button onClick={() => handleAction(request.id, "Rejected")}>Reject</button>
+                    <button onClick={() => handleApprove(request._id)}>
+                      Approve
+                    </button>
+                    <button onClick={() => handleDecline(request._id)}>
+                      Decline
+                    </button>
                   </>
-                ) : (
-                  <span>{request.status}</span>
                 )}
               </td>
             </tr>

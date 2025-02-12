@@ -5,7 +5,9 @@ const cors = require("cors");
 const http = require("http"); // Import the http module
 const parkingRoutes = require("./routes/parkingRoutes");
 const setupNotificationSocket = require("./sockets/notificationSocket");
-
+const scheduleRoutes = require("./routes/scheduleRoutes");
+const notificationRoutes = require("./routes/notificationRoutes");
+const visitorRoutes = require("./routes/visitorRoutes");
 dotenv.config();
 const app = express();
 
@@ -13,7 +15,7 @@ const app = express();
 app.use(express.json()); // Required to parse JSON body
 app.use(
   cors({
-    origin: "http://localhost:3000", // Allow frontend requests
+    origin: "http://localhost:3000", 
     credentials: true
   })
 );
@@ -39,6 +41,11 @@ app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/users", require("./routes/userRoutes"));
 app.use("/api/visitors", require("./routes/visitorRoutes"));
 app.use("/api/parking-stats", parkingRoutes);
+
+
+app.use("/api/schedules", scheduleRoutes);
+app.use("/api/notifications", notificationRoutes);
+app.use("/api/visitor-requests", visitorRoutes);
 
 // Start Server
 const PORT = process.env.PORT || 5000;

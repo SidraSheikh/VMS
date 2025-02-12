@@ -31,6 +31,10 @@ const VisitorLogs = () => {
       head: [["Name", "Email", "Purpose", "Status", "Check-In", "Check-Out"]],
       body: visitors.map((visitor) => [
         visitor.fullName,
+        visitor.hostName,
+        visitor.visitingOffice,
+        visitor.dateOfVisit,
+        visitor.organizationName,
         visitor.mobileNumber,
         visitor.purposeOfVisit,
         visitor.status,
@@ -54,6 +58,10 @@ const VisitorLogs = () => {
         <thead>
           <tr>
             <th>Name</th>
+            <th>Host Name</th>
+            <th>visitingOffice</th>
+            <th>dateOfVisit</th>
+            <th>organization Name</th>
             <th>Mobile Number</th>
             <th>Purpose</th>
             <th>Status</th>
@@ -65,6 +73,10 @@ const VisitorLogs = () => {
           {visitors.map((visitor) => (
             <tr key={visitor._id}>
               <td>{visitor.fullName}</td>
+              <td>{visitor.hostName}</td>
+              <td>{visitor.visitingOffice}</td>
+              <td>{visitor.dateOfVisit}</td>
+              <td>{visitor.organizationName}</td>
               <td>{visitor.mobileNumber}</td>
               <td>{visitor.purposeOfVisit}</td>
               <td>{visitor.status}</td>

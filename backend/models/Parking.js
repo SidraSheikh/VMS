@@ -1,9 +1,10 @@
 const mongoose = require("mongoose");
 
 const parkingSchema = new mongoose.Schema({
-  totalSlots: { type: Number, required: true },
-  twoWheelers: { type: Number, default: 0 }, // Total 2-wheelers
-  fourWheelers: { type: Number, default: 0 }, // Total 4-wheelers
+  location: { type: String, default: "Main Parking Lot" },
+  totalSlots: { type: Number, default: 100 },
+  twoWheelersUsed: { type: Number, default: 0 },
+  fourWheelersUsed: { type: Number, default: 0 }
 });
 
 module.exports = mongoose.model("Parking", parkingSchema);

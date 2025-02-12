@@ -8,13 +8,18 @@ const QRScanner = () => {
 
   const handleScan = async () => {
     try {
-      const response = await fetch("/api/security/validate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ qrData })
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/security/validate`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          },
+          body: JSON.stringify({ qrData })
+        }
+      );
+
       const data = await response.json();
       if (data.success) {
         setVisitorDetails(data.visitor);
@@ -29,7 +34,7 @@ const QRScanner = () => {
   };
 
   return (
-    <div>
+    <div className="qr-scanner-container">
       <input
         type="text"
         className="form-input"
@@ -37,16 +42,25 @@ const QRScanner = () => {
         value={qrData}
         onChange={(e) => setQrData(e.target.value)}
       />
-      <button onClick={handleScan}>Validate</button>
+      <button className="btn-primary" onClick={handleScan}>
+        Validate
+      </button>
+
       {visitorDetails ? (
-        <div>
+        <div className="visitor-info">
           <h3>Visitor Details</h3>
-          <p>Name: {visitorDetails.name}</p>
-          <p>Purpose: {visitorDetails.purpose}</p>
-          <p>Host: {visitorDetails.host}</p>
+          <p>
+            <strong>Name:</strong> {visitorDetails.name}
+          </p>
+          <p>
+            <strong>Purpose:</strong> {visitorDetails.purpose}
+          </p>
+          <p>
+            <strong>Host:</strong> {visitorDetails.host}
+          </p>
         </div>
       ) : error ? (
-        <p style={{ color: "red" }}>{error}</p>
+        <p className="error-message">{error}</p>
       ) : null}
     </div>
   );

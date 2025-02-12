@@ -1,12 +1,18 @@
 const socketIO = require("socket.io");
 
 const setupNotificationSocket = (server) => {
-  const io = socketIO(server);
+  const io = socketIO(server, {
+    cors: {
+      origin: "http://localhost:3000",
+      methods: ["GET", "POST"],
+      credentials: true
+    }
+  });
 
   io.on("connection", (socket) => {
-    console.log("A client connected");
+    console.log("Client connected to WebSocket");
 
-    // Simulate real-time updates for analytics
+    // Real-time updates every 10 seconds
     setInterval(() => {
       const visitorTrends = {
         labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
@@ -15,26 +21,11 @@ const setupNotificationSocket = (server) => {
         )
       };
 
-      const parkingUtilization = {
-        labels: ["2-Wheelers", "4-Wheelers"],
-        data: [30, 70].map((value) => value + Math.floor(Math.random() * 10))
-      };
-
-      const approvalRates = {
-        labels: ["Approved", "Rejected"],
-        data: [80, 20].map((value) => value + Math.floor(Math.random() * 10))
-      };
-
-      // Emit real-time updates to the client
-      socket.emit("analyticsUpdate", {
-        visitorTrends,
-        parkingUtilization,
-        approvalRates
-      });
-    }, 10000); // Update every 10 seconds
+      socket.emit("analyticsUpdate", { visitorTrends });
+    }, 10000);
 
     socket.on("disconnect", () => {
-      console.log("A client disconnected");
+      console.log("❌ Client disconnected");
     });
   });
 };

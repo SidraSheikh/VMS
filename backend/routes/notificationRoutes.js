@@ -1,16 +1,16 @@
-// routes/notificationRoutes.js
 const express = require("express");
-const {
-  getNotifications,
-  addNotification
-} = require("../controllers/notificationController");
-
 const router = express.Router();
+const Notification = require("../models/Notification");
 
-// Fetch all notifications
-router.get("/", getNotifications);
+router.get("/", async (req, res) => {
+  const notifications = await Notification.find().sort({ timestamp: -1 });
+  res.json(notifications);
+});
 
-// Add a new notification
-router.post("/", addNotification);
+router.post("/", async (req, res) => {
+  const newNotification = new Notification(req.body);
+  await newNotification.save();
+  res.status(201).json(newNotification);
+});
 
 module.exports = router;

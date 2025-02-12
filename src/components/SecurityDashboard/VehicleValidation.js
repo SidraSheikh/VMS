@@ -7,26 +7,28 @@ const VehicleValidation = () => {
 
   const validateVehicle = async () => {
     try {
-      const response = await fetch("/api/security/vehicle", {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/security/vehicle`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`
         },
         body: JSON.stringify({ vehicleNumber })
       });
+
       const data = await response.json();
       if (data.success) {
-        setValidationStatus(`Vehicle approved: Slot ${data.slot}`);
+        setValidationStatus(`✅ Vehicle approved: Slot ${data.slot}`);
       } else {
-        setValidationStatus(`Validation failed: ${data.message}`);
+        setValidationStatus(`❌ Validation failed: ${data.message}`);
       }
     } catch (error) {
-      setValidationStatus("Error during vehicle validation!");
+      setValidationStatus("⚠️ Error during vehicle validation!");
     }
   };
 
   return (
-    <div>
+    <div className="vehicle-validation-container">
       <input
         type="text"
         className="form-input"
@@ -34,8 +36,8 @@ const VehicleValidation = () => {
         value={vehicleNumber}
         onChange={(e) => setVehicleNumber(e.target.value)}
       />
-      <button onClick={validateVehicle}>Validate</button>
-      <p>{validationStatus}</p>
+      <button className="btn-primary" onClick={validateVehicle}>Validate</button>
+      <p className="status-message">{validationStatus}</p>
     </div>
   );
 };

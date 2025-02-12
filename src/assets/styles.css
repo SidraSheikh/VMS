@@ -617,7 +617,7 @@ button:focus {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: rgba(0, 0, 0, 0.7)
+  background: rgba(0, 0, 0, 0.8)
     url("https://i.pinimg.com/736x/be/5a/62/be5a6295b3878d593972e9ec5a78a81e.jpg")
     no-repeat center center/cover;
   padding: 20px;
@@ -625,50 +625,58 @@ button:focus {
 }
 
 .visitor-registration-form {
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 15px;
-  padding: 40px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-  max-width: 1000px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  padding: 35px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  max-width: 600px;
   width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: space-between;
-  align-items: flex-start;
   box-sizing: border-box;
+  text-align: center;
+  animation: fadeIn 0.5s ease-in-out;
 }
 
-.register-form h2 {
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.visitor-registration-form h2 {
   font-size: 2rem;
-  font-weight: 700;
+  font-weight: bold;
   color: #2c3e50;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .input-group-visitor {
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   text-align: left;
+  position: relative;
 }
 
-.input-group label {
-  display: block;
+.input-group-visitor label {
   font-size: 1rem;
   font-weight: 600;
   color: #34495e;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
+  display: block;
 }
 
 .input-group-visitor input,
 .input-group-visitor select {
   width: 100%;
-  padding: 12px 15px;
+  padding: 12px;
   font-size: 1rem;
-  border: 1px solid #ccc;
+  border: 1px solid #ddd;
   border-radius: 8px;
   background-color: #f9f9f9;
-  color: #333;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  transition: all 0.3s ease-in-out;
 }
 
 .input-group-visitor input:focus,
@@ -687,25 +695,27 @@ button:focus {
   color: #e74c3c;
   font-size: 0.875rem;
   margin-top: 5px;
+  position: absolute;
+  bottom: -20px;
+  left: 0;
 }
 
 .btn-submit {
-  display: inline-block;
   width: 100%;
   padding: 12px;
-  background: linear-gradient(90deg, #00bcd4, #008ba3);
-  color: #fff;
+  background: linear-gradient(90deg, #007bff, #0056b3);
+  color: white;
   font-size: 1rem;
-  font-weight: 700;
+  font-weight: bold;
   text-transform: uppercase;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .btn-submit:hover {
-  background: linear-gradient(90deg, #008ba3, #005f6b);
+  background: linear-gradient(90deg, #0056b3, #003c7c);
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(0, 123, 255, 0.2);
 }
@@ -718,16 +728,8 @@ button:focus {
 /* Responsive Design */
 @media (max-width: 768px) {
   .visitor-registration-form {
-    flex-direction: column;
-    padding: 30px;
-  }
-
-  .input-group-visitor {
-    flex: 1 1 100%;
-  }
-
-  .btn-submit {
-    margin-top: 20px;
+    max-width: 90%;
+    padding: 25px;
   }
 }
 
@@ -741,6 +743,7 @@ button:focus {
     padding: 10px;
   }
 }
+
 
 /* Global Reset */
 * {
@@ -1242,8 +1245,13 @@ button {
 }
 
 .btn-primary {
-  background-color: #008ba3;
   color: #ffffff;
+  background-color: #4ec0cf;
+  color: #343a40;
+  padding: 9px 0.5px;
+  margin-left: 1rem;
+  border-radius: 9px;
+  font-weight: 600;
 }
 
 .btn-primary:hover {

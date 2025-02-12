@@ -4,18 +4,23 @@ const visitorSchema = new mongoose.Schema({
   fullName: { type: String, required: true },
   cnic: { type: String, required: true },
   mobileNumber: { type: String, required: true },
-  organizationName: { type: String },
+  organizationName: String,
   purposeOfVisit: { type: String, required: true },
   hostName: { type: String, required: true },
-  vehicleNumber: { type: String },
-  vehicleType: { type: String },
+  department: { type: String, required: true },
+  visitingOffice: String,
+  dateOfVisit: Date,
+  timeOfArrival: String,
+  timeOfDeparture: String,
+  vehicleNumber: String,
+  vehicleType: String,
   status: {
     type: String,
     enum: ["Pending", "Approved", "Rejected"],
     default: "Pending"
   },
-  checkIn: { type: Date },
-  checkOut: { type: Date }
+  createdAt: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model("Visitor", visitorSchema);
+const Visitor = mongoose.model("Visitor", visitorSchema);
+module.exports = Visitor;
